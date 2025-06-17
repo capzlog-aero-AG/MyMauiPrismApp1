@@ -1,0 +1,73 @@
+*.svclog
+#ignore thumbnails created by windows
+Thumbs.db
+#Ignore files build by Visual Studio
+*.obj
+#*.exe
+*.msi
+*.pdb
+*.user
+*.aps
+#
+#	PCH Files are needed by the XCode environment so we need to remove the ignore rule	
+#
+# *.pch
+#
+*.vspscc
+*_i.c
+*_p.c
+*.ncb
+*.suo
+*.tlb
+*.tlh
+#*.bak
+*.cache
+*.ilk
+*.log
+[Bb]in
+[Dd]ebug*/
+*.lib
+*.sbr
+obj/
+[Rr]elease*/
+_ReSharper*/
+[Tt]est[Rr]esult*
+**/packages/*
+**/.packages/*
+!**/packages/repositories.config
+**/node_modules/*
+$tf/
+*.sln.*
+!*.sln.dotSettings
+UrasterApps/Documentation/Configuration/SSL/Win64OpenSSL_Light-1_0_1c.exe
+UrasterApps/Logs/authServiceAppMessages/app_messages.svclog
+UrasterApps/Logs/authServiceAppMessages/app_tracelog.svclog
+UrasterApps/Logs/PilotELogbook app_messages.svclog
+UrasterApps/Logs/PilotELogbook app_tracelog.svclog
+UrasterApps/Logs/UserAuthentication app_tracelog.svclog
+UrasterApps/Logs/UserAuthentication app_tracelog.svclog
+UrasterApps/PilotELogbook/WindowsService/app_messages.svclog
+UrasterApps/PilotELogbook/WindowsService/app_tracelog.svclog
+UrasterApps/Documentation/Configuration/Installations/Silverlight_Developer_x64.exe
+UrasterApps/Logs
+UrasterApps/Libs/*.dll
+UrasterApps/Libs/*.zip
+UrasterApps/Libs/*.7z
+UrasterApps/Libs/*.dep
+UrasterApps/Web/Apps/App_Themes/*.dll
+InternalCreditRating/
+PeL iOS (Saorsa).7z
+UrasterApps/.vs/config/applicationhost.config
+UrasterApps/Libs/DevExpressUnused.7z
+sqlite3/
+.vs/
+UrasterApps/Web/Apps/Areas/PeL/Content/Img/LandingPageNew/focusonthegood.jpg
+UrasterApps/Web/Apps/Areas/PeL/Content/Img/LandingPageNew/catcher_main1.jpg
+UrasterApps/Web/Apps/Areas/PeL/Content/Img/LandingPageNew/academy.jpg
+UrasterApps/Web/Apps/Areas/PeL/Content/Img/LandingPageNew/pricing.jpg
+UrasterApps/Web/Apps/Areas/PeL/Content/Img/LandingPageNew/portrait3.jpg
+UrasterApps/Web/Apps/Areas/PeL/Content/Img/LandingPageNew/portrait2.jpg
+UrasterApps/Web/Apps/Areas/PeL/Content/Img/LandingPageNew/portrait1.jpg
+**/.vs/
+/UrasterApps/MobileApps/test.sh
+UrasterApps/Web/Apps/Areas/PeL/PeLAreaRegistration.cs.orig
