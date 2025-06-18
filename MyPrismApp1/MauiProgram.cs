@@ -1,6 +1,10 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Android.App.Job;
+using Microsoft.Extensions.Logging;
 using Microsoft.Maui.Controls.Compatibility.Hosting;
+using MyPrismApp1.Jobs;
 using MyPrismApp1.Views;
+using Shiny;
+using Shiny.Jobs;
 
 namespace MyPrismApp1
 {
@@ -11,6 +15,7 @@ namespace MyPrismApp1
 			var builder = MauiApp.CreateBuilder();
 			builder
 				.UseMauiApp<App>()
+				.UseShiny()
 				.UseMauiCompatibility() // TODO-MAUI: What is this? Found in the sample PrismFullNavigation
 				.ConfigureFonts(fonts =>
 				{
@@ -109,7 +114,8 @@ namespace MyPrismApp1
 					{
 						var navResult = await navigationService.NavigateAsync("/" + nameof(NavigationPage) + "/" + nameof(MainPage));
 					});
-				});
+				})
+				.RegisterShinyServices();
 
 #if DEBUG
 			// TODO-MAUI: Shall this be here and/or above in the prism configuration?
@@ -117,6 +123,15 @@ namespace MyPrismApp1
 #endif
 
 			return builder.Build();
+		}
+		static MauiAppBuilder RegisterShinyServices(this MauiAppBuilder builder)
+		{
+			var s = builder.Services;
+
+			Console.WriteLine($"TODONOW-PM: Registering {nameof(MyJob)}");
+			s.AddJob(new Shiny.Jobs.JobInfo(nameof(MyJob), typeof(MyJob), false, null, InternetAccess.Any, false, false, false));
+
+			return builder;
 		}
 	}
 }
