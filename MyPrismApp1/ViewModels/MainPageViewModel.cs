@@ -1,14 +1,20 @@
-﻿namespace MyPrismApp1.ViewModels;
+﻿using MyPrismApp1.Jobs;
+using Shiny.Jobs;
+
+namespace MyPrismApp1.ViewModels;
 
 public class MainPageViewModel : BindableBase
 {
 	private ISemanticScreenReader _screenReader { get; }
 	private int _count;
+	private IJobManager _jobManager;
 
-	public MainPageViewModel(ISemanticScreenReader screenReader)
+	public MainPageViewModel(ISemanticScreenReader screenReader, IJobManager jobManager)
 	{
 		_screenReader = screenReader;
 		CountCommand = new DelegateCommand(OnCountCommandExecuted);
+		StartJobCommand = new DelegateCommand(OnStartJobCommandExecuted);
+		_jobManager = jobManager;
 	}
 
 	public string Title => "Main Page";
@@ -22,7 +28,7 @@ public class MainPageViewModel : BindableBase
 
 	public DelegateCommand CountCommand { get; }
 
-	private void OnCountCommandExecuted()
+	private async void OnCountCommandExecuted()
 	{
 		_count++;
 		if (_count == 1)
@@ -30,6 +36,25 @@ public class MainPageViewModel : BindableBase
 		else if (_count > 1)
 			Text = $"Clicked {_count} times";
 
+		//if (!await this.IsAnyJobRunning())
+		//{
+		//	var result = await this._jobManager.Run(nameof(MyJob));
+		//}
+
 		_screenReader.Announce(Text);
 	}
+	public DelegateCommand StartJobCommand { get; }
+
+	private async void OnStartJobCommandExecuted()
+	{
+		await this._jobManager.Run(nameof(MyJob));
+	}
+
+	private string _startJobButtonText = "Start Job";
+	public string StartJobButtonText
+	{
+		get => _startJobButtonText;
+		set => SetProperty(ref _startJobButtonText, value);
+	}
+
 }

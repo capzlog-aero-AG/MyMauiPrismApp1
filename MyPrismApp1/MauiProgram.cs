@@ -1,5 +1,4 @@
-﻿using Android.App.Job;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
 using Microsoft.Maui.Controls.Compatibility.Hosting;
 using MyPrismApp1.Jobs;
 using MyPrismApp1.Views;
@@ -129,8 +128,18 @@ namespace MyPrismApp1
 			var s = builder.Services;
 
 			Console.WriteLine($"TODONOW-PM: Registering {nameof(MyJob)}");
-			s.AddJob(new Shiny.Jobs.JobInfo(nameof(MyJob), typeof(MyJob), false, null, InternetAccess.Any, false, false, false));
 
+			s.AddJob(new Shiny.Jobs.JobInfo(nameof(MyJob), typeof(MyJob), 
+				true, 
+				new Dictionary<string, string>()
+				{
+					{"Key1", "Passed Parameter 1"}
+				}, 
+				InternetAccess.Any, 
+				false, // do not require device to be plugged in
+				false, // do not require device to have high battery
+				false)); // system jobs and jobs with JobType == null will be cancelled and restarted upon Job Start by Shiny (not yet clear what we need here)
+			
 			return builder;
 		}
 	}
