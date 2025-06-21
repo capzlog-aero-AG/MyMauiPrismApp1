@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
 using Microsoft.Maui.Controls.Compatibility.Hosting;
+using Microsoft.Maui.LifecycleEvents;
 using MyPrismApp1.Jobs;
 using MyPrismApp1.Views;
 using Shiny;
@@ -121,7 +122,43 @@ namespace MyPrismApp1
 			builder.Logging.AddDebug();
 #endif
 
-			return builder.Build();
+//			builder.ConfigureLifecycleEvents(events =>
+//			{
+//				// https://learn.microsoft.com/en-us/dotnet/maui/fundamentals/app-lifecycle?view=net-maui-9.0#cross-platform-lifecycle-events
+//				// MAUI			Android			iOS
+//				// Created		OnPostCreate    FinishedLaunching
+//				// Activated	OnResume		OnActivated
+//				// Deactivated	OnPause			OnResignActivation
+//				// Stopped		OnStop			DidEnterBackground
+//				// Resumed		OnRestart		WillEnterForeground
+//				// Destroying	OnDestroy		WillTerminate
+//#if ANDROID
+//                    events.AddAndroid(android => android
+//                        .OnActivityResult((activity, requestCode, resultCode, data) => LogEvent(nameof(AndroidLifecycle.OnActivityResult), requestCode.ToString()))
+//                        .OnStart((activity) => LogEvent(nameof(AndroidLifecycle.OnStart)))
+//                        .OnCreate((activity, bundle) => LogEvent(nameof(AndroidLifecycle.OnCreate)))
+//                        .OnStop((activity) => LogEvent(nameof(AndroidLifecycle.OnStop))));
+//#endif
+//#if IOS || MACCATALYST
+//				events.AddiOS(ios => ios
+//					.OnActivated((app) => LogEvent(nameof(iOSLifecycle.OnActivated)))
+//					.OnResignActivation((app) => LogEvent(nameof(iOSLifecycle.OnResignActivation)))
+//					.DidEnterBackground((app) => LogEvent(nameof(iOSLifecycle.DidEnterBackground)))
+//					.WillTerminate((app) => LogEvent(nameof(iOSLifecycle.WillTerminate))));
+//#endif
+//				async void LogEvent(string eventName, string type = null)
+//				{
+//					var jobManager = ServiceHelper.GetService<IJobManager>();
+//					Console.WriteLine($"TODONOW-PM {DateTime.UtcNow.ToString("yyyy-MM-dd hh:mm:ss")}: {nameof(MyJob)} Starting from event {eventName} {(type == null ? string.Empty : $" ({type})")}");
+//					await jobManager.Run(nameof(MyJob));
+//				}
+//			});
+			var app = builder.Build();
+
+			// https://stackoverflow.com/questions/72438903/how-can-i-resolve-a-service-that-i-registered-with-the-builder-services-inside-o
+			ServiceHelper.Initialize(app.Services);
+
+			return app;
 		}
 		static MauiAppBuilder RegisterShinyServices(this MauiAppBuilder builder)
 		{

@@ -36,11 +36,6 @@ public class MainPageViewModel : BindableBase
 		else if (_count > 1)
 			Text = $"Clicked {_count} times";
 
-		//if (!await this.IsAnyJobRunning())
-		//{
-		//	var result = await this._jobManager.Run(nameof(MyJob));
-		//}
-
 		_screenReader.Announce(Text);
 	}
 	public DelegateCommand StartJobCommand { get; }
