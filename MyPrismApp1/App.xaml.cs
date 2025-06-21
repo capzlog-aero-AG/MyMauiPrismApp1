@@ -16,30 +16,25 @@ namespace MyPrismApp1
 
 			window.Created += async (s, e) =>
 			{
-				await RunJob(nameof(Window.Created));
+				await MyJob.RunJob(EventTriggers.OnCreated);
 			};
 			window.Resumed += async (s, e) =>
 			{
-				await RunJob(nameof(Window.Resumed));
+				await MyJob.RunJob(EventTriggers.OnResume);
 			};
 			window.Activated += async (s, e) =>
 			{
-				await RunJob(nameof(Window.Activated));
+				await MyJob.RunJob(EventTriggers.OnActivated);
 			};
 
 			window.Stopped += async (s, e) =>
 			{
-				await RunJob(nameof(Window.Stopped));
+				await MyJob.RunJob(EventTriggers.OnStopped);
 			};
 
 			return window;
 		}
 
-		private async Task RunJob(string eventName)
-		{
-			var jobManager = ServiceHelper.GetService<IJobManager>();
-			Console.WriteLine($"TODONOW-PM {DateTime.UtcNow.ToString("yyyy-MM-dd hh:mm:ss")}: {nameof(MyJob)} Triggered by event: {eventName}");
-			await jobManager.Run(nameof(MyJob));
-		}
+
 	}
 }

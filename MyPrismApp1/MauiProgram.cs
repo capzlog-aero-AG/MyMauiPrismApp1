@@ -5,6 +5,7 @@ using MyPrismApp1.Jobs;
 using MyPrismApp1.Views;
 using Shiny;
 using Shiny.Jobs;
+using JobExtensions = MyPrismApp1.Jobs.JobExtensions;
 
 namespace MyPrismApp1
 {
@@ -122,6 +123,8 @@ namespace MyPrismApp1
 			builder.Logging.AddDebug();
 #endif
 
+			// Note-PM: If we would need finer control of the events than provided by the ones configured in App.xaml.cs, this is how we could do it:
+
 //			builder.ConfigureLifecycleEvents(events =>
 //			{
 //				// https://learn.microsoft.com/en-us/dotnet/maui/fundamentals/app-lifecycle?view=net-maui-9.0#cross-platform-lifecycle-events
@@ -133,25 +136,19 @@ namespace MyPrismApp1
 //				// Resumed		OnRestart		WillEnterForeground
 //				// Destroying	OnDestroy		WillTerminate
 //#if ANDROID
-//                    events.AddAndroid(android => android
-//                        .OnActivityResult((activity, requestCode, resultCode, data) => LogEvent(nameof(AndroidLifecycle.OnActivityResult), requestCode.ToString()))
-//                        .OnStart((activity) => LogEvent(nameof(AndroidLifecycle.OnStart)))
-//                        .OnCreate((activity, bundle) => LogEvent(nameof(AndroidLifecycle.OnCreate)))
-//                        .OnStop((activity) => LogEvent(nameof(AndroidLifecycle.OnStop))));
+//				events.AddAndroid(android => android
+//					.OnStart(async (activity) => await MyJob.RunJob(MyJob.EventTriggers.OnCreated))
+//					.OnCreate(async (activity, bundle) => await MyJob.RunJob(MyJob.EventTriggers.OnCreated))
+//					.OnResume(async (activity) => await MyJob.RunJob(MyJob.EventTriggers.OnResume))
+//					.OnStop(async (activity) => await MyJob.RunJob(MyJob.EventTriggers.OnStopped)));
 //#endif
 //#if IOS || MACCATALYST
 //				events.AddiOS(ios => ios
-//					.OnActivated((app) => LogEvent(nameof(iOSLifecycle.OnActivated)))
-//					.OnResignActivation((app) => LogEvent(nameof(iOSLifecycle.OnResignActivation)))
-//					.DidEnterBackground((app) => LogEvent(nameof(iOSLifecycle.DidEnterBackground)))
-//					.WillTerminate((app) => LogEvent(nameof(iOSLifecycle.WillTerminate))));
+//					.OnActivated(async (app) => await MyJob.RunJob(MyJob.EventTriggers.OnActivated))
+//					.OnResignActivation((app) => await MyJob.RunJob(MyJob.EventTriggers.OnResignActivation)))
+//					.DidEnterBackground((app) => await MyJob.RunJob(MyJob.EventTriggers.OnDidEnterBackground))
+//					.WillTerminate((app) => await MyJob.RunJob(MyJob.EventTriggers.OnWillTerminate)));
 //#endif
-//				async void LogEvent(string eventName, string type = null)
-//				{
-//					var jobManager = ServiceHelper.GetService<IJobManager>();
-//					Console.WriteLine($"TODONOW-PM {DateTime.UtcNow.ToString("yyyy-MM-dd hh:mm:ss")}: {nameof(MyJob)} Starting from event {eventName} {(type == null ? string.Empty : $" ({type})")}");
-//					await jobManager.Run(nameof(MyJob));
-//				}
 //			});
 			var app = builder.Build();
 
@@ -166,16 +163,7 @@ namespace MyPrismApp1
 
 			Console.WriteLine($"TODONOW-PM: Registering {nameof(MyJob)}");
 
-			s.AddJob(new Shiny.Jobs.JobInfo(nameof(MyJob), typeof(MyJob), 
-				true, 
-				new Dictionary<string, string>()
-				{
-					{"Key1", "Passed Parameter 1"}
-				}, 
-				InternetAccess.Any, 
-				false, // do not require device to be plugged in
-				false, // do not require device to have high battery
-				false)); // system jobs and jobs with JobType == null will be cancelled and restarted upon Job Start by Shiny (not yet clear what we need here)
+			s.AddJob(JobExtensions.DefaultJobInfo);
 			
 			return builder;
 		}

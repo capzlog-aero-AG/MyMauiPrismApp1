@@ -42,7 +42,7 @@ public class MainPageViewModel : BindableBase
 
 	private async void OnStartJobCommandExecuted()
 	{
-		await this._jobManager.Run(nameof(MyJob));
+		await MyJob.RunJob(EventTriggers.OnUserInput);
 	}
 
 	private string _startJobButtonText = "Start Job";
