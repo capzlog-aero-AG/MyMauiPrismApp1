@@ -32,6 +32,10 @@
 			        SemanticProperties.Hint="Counts the number of times you click"
 			        Command="{Binding CountCommand}"
 			        HorizontalOptions="Center" />
+			<Button Text="{Binding StartJobButtonText}"
+			        SemanticProperties.Hint="Starts the job upon button click"
+			        Command="{Binding StartJobCommand}"
+			        HorizontalOptions="Center" />
 
 		</VerticalStackLayout>
 	</ScrollView>

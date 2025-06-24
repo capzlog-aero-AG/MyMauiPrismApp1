@@ -1,6 +1,11 @@
 ﻿using Microsoft.Extensions.Logging;
 using Microsoft.Maui.Controls.Compatibility.Hosting;
+using Microsoft.Maui.LifecycleEvents;
+using MyPrismApp1.Jobs;
 using MyPrismApp1.Views;
+using Shiny;
+using Shiny.Jobs;
+using JobExtensions = MyPrismApp1.Jobs.JobExtensions;
 
 namespace MyPrismApp1
 {
@@ -11,6 +16,7 @@ namespace MyPrismApp1
 			var builder = MauiApp.CreateBuilder();
 			builder
 				.UseMauiApp<App>()
+				.UseShiny()
 				.UseMauiCompatibility() // TODO-MAUI: What is this? Found in the sample PrismFullNavigation
 				.ConfigureFonts(fonts =>
 				{
@@ -109,14 +115,57 @@ namespace MyPrismApp1
 					{
 						var navResult = await navigationService.NavigateAsync("/" + nameof(NavigationPage) + "/" + nameof(MainPage));
 					});
-				});
+				})
+				.RegisterShinyServices();
 
 #if DEBUG
 			// TODO-MAUI: Shall this be here and/or above in the prism configuration?
 			builder.Logging.AddDebug();
 #endif
 
-			return builder.Build();
+			// Note-PM: If we would need finer control of the events than provided by the ones configured in App.xaml.cs, this is how we could do it:
+
+//			builder.ConfigureLifecycleEvents(events =>
+//			{
+//				// https://learn.microsoft.com/en-us/dotnet/maui/fundamentals/app-lifecycle?view=net-maui-9.0#cross-platform-lifecycle-events
+//				// MAUI			Android			iOS
+//				// Created		OnPostCreate    FinishedLaunching
+//				// Activated	OnResume		OnActivated
+//				// Deactivated	OnPause			OnResignActivation
+//				// Stopped		OnStop			DidEnterBackground
+//				// Resumed		OnRestart		WillEnterForeground
+//				// Destroying	OnDestroy		WillTerminate
+//#if ANDROID
+//				events.AddAndroid(android => android
+//					.OnStart(async (activity) => await MyJob.RunJob(MyJob.EventTriggers.OnCreated))
+//					.OnCreate(async (activity, bundle) => await MyJob.RunJob(MyJob.EventTriggers.OnCreated))
+//					.OnResume(async (activity) => await MyJob.RunJob(MyJob.EventTriggers.OnResume))
+//					.OnStop(async (activity) => await MyJob.RunJob(MyJob.EventTriggers.OnStopped)));
+//#endif
+//#if IOS || MACCATALYST
+//				events.AddiOS(ios => ios
+//					.OnActivated(async (app) => await MyJob.RunJob(MyJob.EventTriggers.OnActivated))
+//					.OnResignActivation((app) => await MyJob.RunJob(MyJob.EventTriggers.OnResignActivation)))
+//					.DidEnterBackground((app) => await MyJob.RunJob(MyJob.EventTriggers.OnDidEnterBackground))
+//					.WillTerminate((app) => await MyJob.RunJob(MyJob.EventTriggers.OnWillTerminate)));
+//#endif
+//			});
+			var app = builder.Build();
+
+			// https://stackoverflow.com/questions/72438903/how-can-i-resolve-a-service-that-i-registered-with-the-builder-services-inside-o
+			ServiceHelper.Initialize(app.Services);
+
+			return app;
+		}
+		static MauiAppBuilder RegisterShinyServices(this MauiAppBuilder builder)
+		{
+			var s = builder.Services;
+
+			Console.WriteLine($"TODONOW-PM: Registering {nameof(MyJob)}");
+
+			s.AddJob(JobExtensions.DefaultJobInfo);
+			
+			return builder;
 		}
 	}
 }
